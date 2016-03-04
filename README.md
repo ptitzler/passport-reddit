@@ -21,12 +21,15 @@ The Reddit authentication strategy authenticates users using a Reddit
 account and OAuth 2.0 tokens.  The strategy requires a `verify` callback, which
 accepts these credentials and calls `done` providing a user, as well as
 `options` specifying a client ID, client secret, and callback URL.
+[Reddit's API](https://github.com/reddit/reddit/wiki/API) requires a unique and descriptive `User-Agent` header, 
+which can be set using the customHeaders property.
 
 ```javascript
 passport.use(new RedditStrategy({
     clientID: REDDIT_CONSUMER_KEY,
     clientSecret: REDDIT_CONSUMER_SECRET,
-    callbackURL: "http://127.0.0.1:3000/auth/reddit/callback"
+    callbackURL: "http://127.0.0.1:3000/auth/reddit/callback",
+    customHeaders: { 'User-Agent': 'unique-user-agent-name'}
   },
   function(accessToken, refreshToken, profile, done) {
     User.findOrCreate({ redditId: profile.id }, function (err, user) {
